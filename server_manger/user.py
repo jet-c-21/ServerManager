@@ -126,8 +126,9 @@ def get_q_user_data_df(user_dn_file_path: str) -> pd.DataFrame:
     user_q_data = get_q_user_data(user_dn_file_path)
     return pd.DataFrame(user_q_data)
 
+
 def create_user_csv(user_dn_file_path: str, save_fp='user_data.csv'):
     df = get_q_user_data_df(user_dn_file_path)
     df.to_csv(save_fp, index=False)
-
+    
 # <<<<<< Shortcut Functions <<<<<<
