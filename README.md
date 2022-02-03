@@ -15,5 +15,5 @@ python -m ipykernel install --user --name sm --display-name "Server Manager"
 ## Command History
 - zsh
 ```
-sudo -S grep -e \"$pattern\" /home/*/.bash_history >! cmd_hist.txt
+sudo -S grep -e "$pattern" /home/*/.bash_history >! cmd_hist.txt
 ```
