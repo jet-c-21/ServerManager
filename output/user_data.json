@@ -1,0 +1,128 @@
+[
+    {
+        "uid": 1,
+        "default_name": "fmhuang",
+        "user": "fmhuang",
+        "created_by_cmd": false
+    },
+    {
+        "uid": 2,
+        "default_name": "Jet C.",
+        "user": "jet",
+        "created_by_cmd": false
+    },
+    {
+        "uid": 3,
+        "default_name": "Jet Backup",
+        "user": "if_011",
+        "created_by_cmd": false
+    },
+    {
+        "uid": 4,
+        "default_name": "if",
+        "user": "if",
+        "created_by_cmd": true
+    },
+    {
+        "uid": 5,
+        "default_name": "iflab",
+        "user": "iflab",
+        "created_by_cmd": true
+    },
+    {
+        "uid": 10,
+        "default_name": "if_006",
+        "user": "if_006",
+        "created_by_cmd": true
+    },
+    {
+        "uid": 12,
+        "default_name": "if_008",
+        "user": "if_008",
+        "created_by_cmd": true
+    },
+    {
+        "uid": 13,
+        "default_name": "if_009",
+        "user": "if_009",
+        "created_by_cmd": true
+    },
+    {
+        "uid": 14,
+        "default_name": "if_010",
+        "user": "if_010",
+        "created_by_cmd": true
+    },
+    {
+        "uid": 15,
+        "default_name": "if_012",
+        "user": "if_012",
+        "created_by_cmd": true
+    },
+    {
+        "uid": 16,
+        "default_name": "if_013",
+        "user": "if_013",
+        "created_by_cmd": true
+    },
+    {
+        "uid": 17,
+        "default_name": "if_015",
+        "user": "if_015",
+        "created_by_cmd": true
+    },
+    {
+        "uid": 18,
+        "default_name": "if_017",
+        "user": "if_017",
+        "created_by_cmd": true
+    },
+    {
+        "uid": 19,
+        "default_name": "if_888",
+        "user": "if_888",
+        "created_by_cmd": true
+    },
+    {
+        "uid": 20,
+        "default_name": "allison",
+        "user": "allison",
+        "created_by_cmd": true
+    },
+    {
+        "uid": 22,
+        "default_name": "stephanie",
+        "user": "stephanie",
+        "created_by_cmd": true
+    },
+    {
+        "uid": 23,
+        "default_name": "cyang",
+        "user": "cyang",
+        "created_by_cmd": true
+    },
+    {
+        "uid": 24,
+        "default_name": "cheryl",
+        "user": "cheryl",
+        "created_by_cmd": true
+    },
+    {
+        "uid": 25,
+        "default_name": "woa",
+        "user": "woa",
+        "created_by_cmd": true
+    },
+    {
+        "uid": 26,
+        "default_name": "uni",
+        "user": "uni",
+        "created_by_cmd": true
+    },
+    {
+        "uid": 27,
+        "default_name": "ibm",
+        "user": "ibm",
+        "created_by_cmd": true
+    }
+]
