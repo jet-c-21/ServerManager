@@ -1,1 +1,5 @@
+# jupyter notebook
+ipykernel
+
+# data parsing
 pandas
