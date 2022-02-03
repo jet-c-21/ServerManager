@@ -6,7 +6,7 @@ DATASET_A_AP/*
 .virtual_documents
 README.md.backup
 kite_tutorial.ipynb
-/output
+output/*
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
