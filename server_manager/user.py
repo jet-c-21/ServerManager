@@ -4,131 +4,92 @@ author: Jet Chien
 GitHub: https://github.com/jet-c-21
 Create Date: 2/3/22
 """
-import json
+from .run import cmdexor
 import pandas as pd
-from .ult import run_cmd, _run_cmd, to_json
 
 
-def get_user_dn_ls_from_file(fp: str) -> list:
-    """
-    return a list with user default (displayed) names
+def _get_user_df(user_data: list):
+    df = pd.DataFrame(columns=[
+        'Username',  # <$1>, It is used when user logs in. It should be between 1 and 32 characters in length
+        'UID',  # <$3>, User ID number
+        'GID',  # <$4>, User’s group ID number (GID)
+        'Shell',  # <$7>, The absolute path of a command or shell (/bin/bash)
+        'HDIR',  # <$6>, User home directory
+        'XPWD',  # <$2>, Encrypted password (x means that the password is stored in the /etc/shadow file)
+        'FullName',  # <f1-$5>, User's full name (or application name, if the account is for a program)
+        'Contact',  # <f2-$5>, Building and room number or contact person
+        'OfficeTel',  # <f3-$5>, Office telephone number
+        'HomeTel',  # <f4-$5>, Home telephone number
+        'OtherContact',  # <f5-$5>, Any other contact information (pager number, fax, external e-mail address, etc.)
+        'GECOS',  # <$5>, User Info
+    ])
 
-    :param fp:
-    :return:
-    """
-    with open(fp, 'r') as f:
-        result = f.readlines()
-        for i in range(len(result)):
-            u = result[i]
-            result[i] = u.strip()
+    for r in user_data:
+        tokens = r.split(' ')
+        user_name = tokens[0]
+        x_pwd = tokens[1]
+        uid = tokens[2]
+        gid = tokens[3]
+        gecos = tokens[4]
 
-    return result
+        gecos_tokens = gecos.split(',')
+        full_name = gecos_tokens[0]
 
+        if 1 < len(gecos_tokens):
+            contact = gecos_tokens[1]
+        else:
+            contact = ''
 
-def get_all_user() -> list:
-    """
-    it will return all user (concise name) on the device, including some service name
-    :return:
-    """
-    cmd = "getent passwd | awk -F: '{ print $1}'"
-    return run_cmd(cmd)
+        if 2 < len(gecos_tokens):
+            office_tel = gecos_tokens[2]
+        else:
+            office_tel = ''
 
+        if 3 < len(gecos_tokens):
+            home_tel = gecos_tokens[3]
+        else:
+            home_tel = ''
 
-def get_user_name(user: str):
-    """
-    return the Full (displayed) name of an user
+        if 4 < len(gecos_tokens):
+            other_contact = gecos_tokens[4]
+        else:
+            other_contact = ''
 
-    :param user:
-    :return:
-    """
-    cmd = f"getent passwd {user} | cut -d ':' -f 5"
-    return _run_cmd(cmd).strip()
+        home_dir = tokens[5]
+        shell = tokens[6]
 
+        df.loc[len(df)] = [
+            user_name, uid, gid, shell, home_dir, x_pwd,
+            full_name, contact, office_tel, home_tel, other_contact, gecos
+        ]
 
-def get_user_data() -> list:
-    result = list()
-    all_user = get_all_user()
-    for i, user in enumerate(all_user, start=1):
-        user_name = get_user_name(user)
-
-        # strip system suffix characters
-        if user_name[len(user_name) - 3:len(user_name)] == ',,,':
-            user_name = user_name[0:len(user_name) - 3]
-
-        user_data = {
-            'index': i,
-            'user': user,
-            'name': user_name
-        }
-
-        result.append(user_data)
-
-    return result
-
-
-def map_user_data_with_user_dn_ls(user_dn_ls: list) -> list:
-    """
-    returned result:
-    [
-        {
-            'uid': int,
-            'default_name': str,
-            'user': str,
-            'created_by_cmd': bool,
-        },
-        {},
-        ...,
-        {}
-    ]
-
-    :param user_dn_ls:
-    :return:
-    """
-    result = list()
-    user_data = get_user_data()
-
-    for i, user_dn in enumerate(user_dn_ls, start=1):
-        for d in user_data:
-            record = {
-                'uid': i,
-                'default_name': user_dn,
-                'user': d['user'],
-            }
-
-            if user_dn == d['name']:
-                record['created_by_cmd'] = False
-                result.append(record)
-
-            elif d['name'] == '' and d['user'] == user_dn:
-                record['created_by_cmd'] = True
-                result.append(record)
-
-    return result
+    return df
 
 
-# >>>>>> Shortcut Functions >>>>>>
-def get_q_user_data(user_dn_file_path: str) -> list:
-    user_dn_ls = get_user_dn_ls_from_file(user_dn_file_path)
-    return map_user_data_with_user_dn_ls(user_dn_ls)
+def get_system_user():
+    # cmd = "awk -F: '($3<1000)&&($1!=\"root\") {print $1, $2, $3, $4, $5, $6, $7}' /etc/passwd"
+    cmd = "awk -F: '($3<1000) {print $1, $2, $3, $4, $5, $6, $7}' /etc/passwd"
+    user_data = cmdexor.run_cmd(cmd)
+
+    return _get_user_df(user_data)
 
 
-def create_user_json(user_dn_file_path: str, save_fp='user_data.json'):
-    user_q_data = get_q_user_data(user_dn_file_path)
-    to_json(user_q_data, save_fp)
+def get_service_user():
+    cmd = "awk -F: '($3>=1000)&&($1!=\"nobody\"){print $1, $2, $3, $4, $5, $6, $7}' /etc/passwd"
+    user_data = cmdexor.run_cmd(cmd)
+
+    return _get_user_df(user_data)
 
 
-def get_user_json_str(user_dn_file_path: str) -> str:
-    user_q_data = get_q_user_data(user_dn_file_path)
-    return json.dumps(user_q_data)
+def get_user_data():
+    cmd = "awk -F: '($3>=1000)&&($1!=\"nobody\")' /etc/passwd"
+    user_data = cmdexor.run_cmd(cmd)
+
+    return user_data
 
 
-def get_q_user_data_df(user_dn_file_path: str) -> pd.DataFrame:
-    user_q_data = get_q_user_data(user_dn_file_path)
-    return pd.DataFrame(user_q_data)
+def get_user_data_sp():
+    cmd = "awk -F: '($3>=1000)&&($1!=\"nobody\"){print $1, \"$$$\", $2, $3, $4, $5, $6, $7}' /etc/passwd"
+    user_data = cmdexor.run_cmd(cmd)
 
-
-def create_user_csv(user_dn_file_path: str, save_fp='user_data.csv'):
-    df = get_q_user_data_df(user_dn_file_path)
-    df.to_csv(save_fp, index=False)
-
-# <<<<<< Shortcut Functions <<<<<<
+    return user_data

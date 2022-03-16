@@ -19,5 +19,5 @@ if __name__ == '__main__':
     # df = sm.get_q_user_data_df(file_path)
     # print(df)
 
-    x = sm.get_cmd_hist_df_by_user('Edward261')
-    print(x)
+    # x = sm.get_cmd_hist_df_by_user('Edward261')
+    # print(x)
