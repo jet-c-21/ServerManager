@@ -5,6 +5,7 @@ GitHub: https://github.com/jet-c-21
 Create Date: 3/16/22
 """
 import subprocess
+from typing import Union
 
 '''
 All the method for executing the commands in this file should be done in the server environment (locally)
@@ -23,14 +24,18 @@ def _run_cmd(cmd: str) -> str:
                                    shell=True).decode('utf-8').strip()
 
 
-def _run_cmd_by_open_proc(cmd: str) -> str:
-    proc_out, proc_error = subprocess.Popen(cmd,
-                                            stdout=subprocess.PIPE,
-                                            shell=True).communicate()
+def _run_cmd_by_open_proc(cmd: str) -> Union[str, None]:
+    p = subprocess.Popen(cmd,
+                         stdout=subprocess.PIPE,
+                         stderr=subprocess.PIPE,
+                         shell=True)
+    proc_out, proc_error = p.communicate()
+
     if proc_error:
         proc_error = proc_error.decode('utf-8').strip()
         msg = f"Process Error: {proc_error}"
         print(msg)
+        return
 
     if proc_out:
         proc_out = proc_out.decode('utf-8').strip()

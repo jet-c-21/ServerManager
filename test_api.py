@@ -5,17 +5,22 @@ GitHub: https://github.com/jet-c-21
 Create Date: 3/16/22
 """
 from pprint import pp
-from server_manager import *
+import server_manager as sm
+import subprocess
 
 if __name__ == '__main__':
-    x = get_service_user()
+    pass
+    # x = sm.user.get_user_env_var()
     # print(x)
+    command = "su - ; echo"
+    # p = subprocess.run(command, capture_output=True, shell=True, text=True)
+    # print(p.stdout)
 
-    user_csv_sp = 'output/service_user.csv'
-    # x.to_csv(user_csv_sp, index=False)
+    cmd = 'echo  |-S su -; echo $USER'
+    p = subprocess.Popen(cmd,
+                         stdout=subprocess.PIPE,
+                         stderr=subprocess.PIPE,
+                         shell=True)
+    proc_out, proc_error = p.communicate()
 
-    y = get_user_data_sp()
-    pp(y)
-
-    # cmd = "awk -F: '($3<1000)&&($1!=\"root\")' /etc/passwd"
-    # cmdexor._run_cmd(cmd)
+    print(proc_out)

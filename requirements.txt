@@ -3,3 +3,6 @@ ipykernel
 
 # data parsing
 pandas
+
+# ssh
+paramiko
