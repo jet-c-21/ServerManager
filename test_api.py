@@ -7,6 +7,12 @@ Create Date: 3/16/22
 from pprint import pp
 import server_manager as sm
 import subprocess
+import configparser
+
+config = configparser.ConfigParser()
+config.read('config.cfg')
+
+
 
 if __name__ == '__main__':
     pass
